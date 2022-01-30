@@ -1,24 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Layout from "./components/layout";
+import { useState } from "react";
+import Web3js from "./components/web3";
+import EthersJs from "./components/ethers";
+
+const button = {
+  margin: "2rem",
+  padding: "20px 30px",
+  borderRadius: "5px",
+  border: "0px",
+  backgroundColor: "#ccc",
+  fontSize: "1rem",
+  cursor: "pointer"
+};
+
+const web3 = "Web3 JS";
+const ethers = "Ethers JS";
 
 function App() {
+  const [component, setComponent] = useState();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout home title={component}>
+      <div align="center">
+        <button style={button} onClick={() => setComponent(web3)}>
+          Web3
+        </button>
+        &nbsp;
+        <button style={button} onClick={() => setComponent(ethers)}>
+          Ethers
+        </button>
+        {component === "Web3 JS" && <Web3js />}
+        {component === "Ethers JS" && <EthersJs />}
+      </div>
+    </Layout>
   );
 }
 
