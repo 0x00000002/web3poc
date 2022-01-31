@@ -3,7 +3,7 @@ import styles from "./layout.module.css";
 export const siteTitle = "Next.js Sample Website";
 
 export default function Layout({ children, home, title = "JS" }) {
-  const name = `Metamask by ${title} library`;
+  const name = `Metamask by ${title}`;
   return (
     <div className={styles.container}>
       <link rel="icon" href="/favicon.ico" />

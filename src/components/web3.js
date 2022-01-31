@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 
 const Web3js = () => {
   const [check, setCheck] = useState("FALSE");
+  const [address, setAddress] = useState("");
 
   const checkEthEnabled = useCallback(async () => {
     if (window.ethereum) {
@@ -16,7 +17,11 @@ const Web3js = () => {
     checkEthEnabled();
   }, [checkEthEnabled]);
 
-  return <p>{check ? "Provider successfully injected!" : "No injection"}</p>;
+  return (
+    <p>
+      {check ? `Provider successfully injected! ${address}` : "No injection"}
+    </p>
+  );
 };
 
 export default Web3js;
