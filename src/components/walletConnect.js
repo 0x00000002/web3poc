@@ -1,6 +1,7 @@
 import { providers } from "ethers";
 import { useEffect, useState } from "react";
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import DisplayStatus from "./status";
 
 const EthersWeb3Modal = () => {
   const [w3, setW3] = useState(null);
@@ -29,7 +30,7 @@ const EthersWeb3Modal = () => {
     w3 ? checkEthEnabled() : connect();
   }, [w3]);
 
-  return <p>{address && address}</p>;
+  return <DisplayStatus props={{ provider: w3, address }} />;
 };
 
 export default EthersWeb3Modal;

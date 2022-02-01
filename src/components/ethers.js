@@ -1,31 +1,28 @@
 import { ethers } from "ethers";
 import { useEffect, useState, useCallback } from "react";
+import DisplayStatus from "./status";
 
 const EthersJs = () => {
-  const [check, setCheck] = useState("FALSE");
+  const [provider, setProvider] = useState(null);
   const [address, setAddress] = useState("");
 
-  const checkEthEnabled = useCallback(async () => {
+  const connect = useCallback(async () => {
     if (window.ethereum) {
       await window.ethereum.request({ method: "eth_requestAccounts" });
-
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-
-      setAddress(await signer.getAddress());
-      setCheck("TRUE");
+      setProvider(new ethers.providers.Web3Provider(window.ethereum));
     }
   }, []);
 
-  useEffect(() => {
-    checkEthEnabled();
-  }, [checkEthEnabled]);
+  const checkEthEnabled = useCallback(async () => {
+    const signer = provider.getSigner();
+    setAddress(await signer.getAddress());
+  }, [provider]);
 
-  return (
-    <p>
-      {check ? `Provider successfully injected! ${address}` : "No injection"}
-    </p>
-  );
+  useEffect(() => {
+    provider ? checkEthEnabled() : connect();
+  }, [provider, connect, checkEthEnabled]);
+
+  return <DisplayStatus props={{ provider, address }} />;
 };
 
 export default EthersJs;

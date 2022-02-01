@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import { useEffect, useState, useCallback } from "react";
 import Web3Modal from "web3modal";
+import DisplayStatus from "./status";
 
 const providerOptions = {
   /* See Provider Options Section */
@@ -13,31 +14,29 @@ const web3Modal = new Web3Modal({
 });
 
 const EthersWeb3Modal = () => {
-  const [provider, setProvider] = useState(false);
+  const [provider, setProvider] = useState(null);
   const [address, setAddress] = useState("");
-  const [instance, setInstance] = useState();
 
   const connect = useCallback(async () => {
-    setInstance(await web3Modal.connect());
-    setProvider(true);
+    setProvider(await web3Modal.connect());
   }, []);
 
   const checkEthEnabled = useCallback(async () => {
     if (window.ethereum) {
+      setProvider(true);
       await window.ethereum.request({ method: "eth_requestAccounts" });
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
 
-      const address = setAddress(await signer.getAddress());
-      address && setAddress("TRUE");
+      setAddress(await signer.getAddress());
     }
   }, []);
 
   useEffect(() => {
-    provider ? connect() : checkEthEnabled();
-  }, [instance, provider, address, connect, checkEthEnabled]);
+    provider ? checkEthEnabled() : connect();
+  }, [provider, connect, checkEthEnabled]);
 
-  return <p>{address && address}</p>;
+  return <DisplayStatus props={{ provider, address }} />;
 };
 
 export default EthersWeb3Modal;
